@@ -5,8 +5,11 @@
 #include <vector>
 
 std::vector<int> getRandomVector(int sizeVector);
+
 std::vector<int> getVector(int sizeVector);
+
 int getLocalSum(std::vector<int> _vec);
+
 int getParallelSumVector(std::vector<int> _vec, int sizeVector);
 
 

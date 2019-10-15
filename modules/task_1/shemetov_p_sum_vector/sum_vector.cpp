@@ -1,9 +1,9 @@
 // Copyright 2019 Shemetov Philipp
-#include <iostream>
+#include <mpi.h>
 #include <vector>
 #include <random>
-#include <time.h>
-#include <mpi.h>
+#include <ctime>
+#include "./sum_vector.h"
 
 
 //Получить рандомный вектор
@@ -28,13 +28,13 @@ std::vector<int> getVector(int sizeVector) {
     }
     std::vector<int> vec(sizeVector);
     for (int i = 0; i < sizeVector; i++) {
-        vec[i] = i+1;
+        vec[i] = i + 1;
     }
     return vec;
 }
 
 //Получить сумму вектора
-int getLocalSum(std::vector<int> _vec){
+int getLocalSum(std::vector<int> _vec) {
     const int sizeTempVector = _vec.size();
     int sum = 0;
     for (int i = 0; i < sizeTempVector; i++) {
@@ -42,11 +42,9 @@ int getLocalSum(std::vector<int> _vec){
     }
 
     return sum;
-    
-
 }
 
-//Высчитываем сумму вектора с параллельными вычислениями 
+//Высчитываем сумму вектора с параллельными вычислениями
 int getParallelSumVector(std::vector<int> _vec, int sizeVector) {
     if (sizeVector < 1) {
         throw "ErrorLength";
@@ -69,14 +67,12 @@ int getParallelSumVector(std::vector<int> _vec, int sizeVector) {
     std::vector<int> localVector(blockData);
     if (rankProc == 0) {
         localVector = std::vector<int>(_vec.begin(),
-                                     _vec.begin() + blockData +
-                                     blockDataRemainder);
+                                       _vec.begin() + blockData +
+                                       blockDataRemainder);
     } else {
         MPI_Status status;
         MPI_Recv(&localVector[0], blockData, MPI_INT, 0, 0, MPI_COMM_WORLD,
                  &status);
-
-
     }
 
     const int sizeLocalVector = localVector.size();
@@ -86,7 +82,7 @@ int getParallelSumVector(std::vector<int> _vec, int sizeVector) {
         localSum += localVector[i];
     }
     MPI_Reduce(&localSum, &globalSum, 1,
-            MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+               MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     return globalSum;
 }
 
