@@ -7,6 +7,9 @@
 
 //Получить рандомный вектор
 std::vector<int> getRandomVector(int sizeVector) {
+    if (sizeVector < 1) {
+        throw "ErrorLength";
+    }
     std::mt19937 generation;
     generation.seed(static_cast<unsigned int>(time(NULL)));
     std::vector<int> vec(sizeVector);
@@ -17,11 +20,14 @@ std::vector<int> getRandomVector(int sizeVector) {
 }
 
 
-//Получить не рандомный вектор
+//Получить не рандомный вектор для дебага
 std::vector<int> getVector(int sizeVector) {
+    if (sizeVector < 1) {
+        throw "ErrorLength";
+    }
     std::vector<int> vec(sizeVector);
     for (int i = 0; i < sizeVector; i++) {
-        vec[i] = i;
+        vec[i] = i+1;
     }
     return vec;
 }
@@ -46,28 +52,28 @@ int getParallerSumVector(std::vector<int> &_vec, int sizeVector) {
     }
 
 
-    std::vector<int> local_vec(blockData);
+    std::vector<int> localVector(blockData);
     if (rankProc == 0) {
-        local_vec = std::vector<int>(_vec.begin(),
+        localVector = std::vector<int>(_vec.begin(),
                                      _vec.begin() + blockData +
                                      blockDataRemainder);
     } else {
         MPI_Status status;
-        MPI_Recv(&local_vec[0], blockData, MPI_INT, 0, 0, MPI_COMM_WORLD,
+        MPI_Recv(&localVector[0], blockData, MPI_INT, 0, 0, MPI_COMM_WORLD,
                  &status);
 
 
     }
 
 
-    int global_sum = 0;
-    int local_sum = 0;
-    for (size_t i = 0; i < local_vec.size(); i++) {
-        local_sum += local_vec[i];
+    int globalSum = 0;
+    int localSum = 0;
+    for (int i = 0; i < localVector.size(); i++) {
+        localSum += localVector[i];
     }
-    MPI_Reduce(&local_sum, &global_sum, 1,
+    MPI_Reduce(&localSum, &globalSum, 1,
             MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-    return global_sum;
+    return globalSum;
 }
 
 
@@ -85,7 +91,7 @@ int getParallerSumVector(std::vector<int> &_vec, int sizeVector) {
     {
         global_vec = getVector(count_size_vector);
     }
-    int global_sum = getParallerSumVector(global_vec, count_size_vector);
+    int globalSum = getParallerSumVector(global_vec, count_size_vector);
     MPI_Finalize();
     return 0;
 }*/

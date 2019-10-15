@@ -4,8 +4,8 @@
 #include "./sum_vector.h"
 
 TEST(Vector_Sum, Test_Wrong_Length) {
-std::vector<int> vec;
-ASSERT_ANY_THROW(vec = getRandomVector(-20));
+std::vector<int> vectorTest;
+ASSERT_ANY_THROW(vectorTest = getRandomVector(-100));
 }
 
 int main(int argc, char** argv) {

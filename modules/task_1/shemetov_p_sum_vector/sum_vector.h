@@ -5,8 +5,9 @@
 #include <vector>
 
 std::vector<int> getRandomVector(int sizeVector);
-int getSum(std::vector<int> vec);
-int getSumMPI(std::vector<int> vec, int len);
+std::vector<int> getVector(int sizeVector);
+int getParallerSumVector(std::vector<int> &_vec, int sizeVector);
+
 
 #endif  // MODULES_TASK_1_SHEMETOV_P_SUM_VECTOR_SUM_VECTOR_H_
 
