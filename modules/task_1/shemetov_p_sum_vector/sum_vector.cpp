@@ -65,10 +65,10 @@ int getParallerSumVector(std::vector<int> &_vec, int sizeVector) {
 
     }
 
-
+    const int sizeLocalVector = localVector.size();
     int globalSum = 0;
     int localSum = 0;
-    for (int i = 0; i < localVector.size(); i++) {
+    for (int i = 0; i < sizeLocalVector; i++) {
         localSum += localVector[i];
     }
     MPI_Reduce(&localSum, &globalSum, 1,

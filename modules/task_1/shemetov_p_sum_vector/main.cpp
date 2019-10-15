@@ -3,10 +3,12 @@
 #include <vector>
 #include "./sum_vector.h"
 
-TEST(Vector_Sum, Test_Wrong_Length) {
+TEST(Sum_Vector, Test_Wrong_Length_Random_Vector) {
 std::vector<int> vectorTest;
 ASSERT_ANY_THROW(vectorTest = getRandomVector(-100));
 }
+
+
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
