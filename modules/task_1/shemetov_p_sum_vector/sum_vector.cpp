@@ -1,3 +1,4 @@
+// Copyright 2019 Shemetov Philipp
 #include <iostream>
 #include <vector>
 #include <random>
@@ -32,8 +33,21 @@ std::vector<int> getVector(int sizeVector) {
     return vec;
 }
 
-//Высчитываем сумму вектора
-int getParallerSumVector(std::vector<int> &_vec, int sizeVector) {
+//Получить сумму вектора
+int getLocalSum(std::vector<int> _vec){
+    const int sizeTempVector = _vec.size();
+    int sum = 0;
+    for (int i = 0; i < sizeTempVector; i++) {
+        sum += _vec[i];
+    }
+
+    return sum;
+    
+
+}
+
+//Высчитываем сумму вектора с параллельными вычислениями 
+int getParallelSumVector(std::vector<int> _vec, int sizeVector) {
     if (sizeVector < 1) {
         throw "ErrorLength";
     }
