@@ -3,12 +3,12 @@
 
 MPI_Comm getHypercube(int dimension) {
     int sizeProc;
-    int lengthHyperCube = 2;
+    int sizeNodeHyperCube = 2;
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     int *ndims = new int[dimension];
     for (int i = 0; i < dimension; i++)
     {
-        ndims[i] = lengthHyperCube;
+        ndims[i] = sizeNodeHyperCube;
     }
     int pivot = 1;
     for (int i = 0; i < dimension; i++)
