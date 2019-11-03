@@ -7,7 +7,7 @@ MPI_Comm getHypercube(int numDims) {
     }
     const int sizeNodeHyperCube = 2;
     int sizeProc;
-    int reorder, pivot = 1;
+    int reorder = 1, pivot = 1;
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     int *sizeOfDim = new int[numDims];
     int* periods = new int[numDims];
@@ -23,7 +23,7 @@ MPI_Comm getHypercube(int numDims) {
     {
         pivot *= sizeOfDim[i];
     }
-    if (sizeProc % pivot != 0)
+    if (sizeProc != pivot)
         return MPI_COMM_NULL;
     
 
