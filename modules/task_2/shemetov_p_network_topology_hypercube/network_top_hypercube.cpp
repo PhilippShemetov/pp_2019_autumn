@@ -41,16 +41,19 @@ MPI_Comm getHypercube(int numDims) {
 
 }
 
+//Проверка коммуникатора на тополгию гиперкуба
 bool thisIsHypercube(MPI_Comm test_comm,int numDims) {
     const int sizeNodeHyperCube = 2;
     int countDis, status;
     int* sizeOfDim = new int[numDims];
     int* periods = new int[numDims];
     int* coord = new int[numDims];
+    //Возвращаем кол-во измерений
     MPI_Cartdim_get(test_comm, &countDis);
     if (numDims != countDis) {
         return false;
     }
+    //Проверяем, является ли коммуникатор правильным типом топологии
     MPI_Topo_test(test_comm,&status);
     if (status != MPI_CART) {
         return false;
@@ -59,6 +62,7 @@ bool thisIsHypercube(MPI_Comm test_comm,int numDims) {
     {
         sizeOfDim[i] = sizeNodeHyperCube;
     }
+    //Получаем информацию декартовой топологии и проверям периодичность
     MPI_Cart_get(test_comm, numDims,sizeOfDim, periods, coord);
     for (int i = 0; i < numDims; i++)
     {
@@ -68,3 +72,7 @@ bool thisIsHypercube(MPI_Comm test_comm,int numDims) {
     }
     return true;
 }
+
+//bool hypercubeDataTransfer(MPI_Comm test_comm) {
+//    int rankProc, sizeProc;
+//}

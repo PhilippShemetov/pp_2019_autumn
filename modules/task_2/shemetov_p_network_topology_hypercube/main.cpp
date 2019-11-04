@@ -9,17 +9,51 @@ TEST(Network_Top_Hypercube, Test_Wrong_Size_Dimension_Of_Hypercube) {
 
 }
 
-TEST(Network_Top_Hypercube,Test_On_Equale_Size_Proc_And_Size_Node_Hypercube) {
-    MPI_Comm actual_comm = getHypercube(3);
-    
+//TEST(Network_Top_Hypercube,Test_On_Equale_Size_Proc_And_Size_Node_Hypercube) {
+//    MPI_Comm actual_comm = getHypercube(3);
+//    
+//    int rankProc;
+//    MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
+//    if (rankProc == 0) {
+//        EXPECT_NE(MPI_COMM_NULL, actual_comm);
+//    }
+//}
+
+//TEST(Network_Top_Hypercube, Test_This_Hypercube_Has_Not_Right_Dimension) {
+//    MPI_Comm actual_comm = getHypercube(2);
+//
+//    int rankProc;
+//
+//    MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
+//
+//    if (rankProc == 0) {
+//        ASSERT_FALSE(thisIsHypercube(actual_comm, 3));
+//    }
+//}
+
+//TEST(Network_Top_Hypercube, Test_This_Hypercube_Has_Right_Arguments) {
+//    MPI_Comm actual_comm = getHypercube(4);
+//
+//    int rankProc;
+//
+//    MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
+//
+//    if (rankProc == 0) {
+//        ASSERT_TRUE(thisIsHypercube(actual_comm, 4));
+//    }
+//}
+
+TEST(Network_Top_Hypercube, Test_Can_Create_Hypercube_Comm) {
+    MPI_Comm actual_comm = getHypercube(2);
     int rankProc;
+    
     MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
+
     if (rankProc == 0) {
-        EXPECT_NE(MPI_COMM_NULL, actual_comm);
+        EXPECT_TRUE()
     }
+
 }
-
-
 
 
 
