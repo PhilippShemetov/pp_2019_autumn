@@ -2,11 +2,10 @@
 #include "./network_top_hypercube.h"
 #include<iostream>
 
-MPI_Comm getHypercube(int numDims) {
-    if (numDims < 2) {
-        throw "The hypercube should be >=2d";
+MPI_Comm getHypercube(int numDims,int sizeNodeHyperCube) {
+    if (numDims < 2 || sizeNodeHyperCube < 2) {
+        throw "The hypercube should be >= 2d and should size node >= 2d ";
     }
-    const int sizeNodeHyperCube = 2;
     int sizeProc,rankProc;
     int reorder = 1, pivot = 1;
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
@@ -15,17 +14,11 @@ MPI_Comm getHypercube(int numDims) {
     for (int i = 0; i < numDims; i++)
     {
         sizeOfDim[i] = sizeNodeHyperCube;
-    }
-    for (int i = 0; i < numDims; i++)
-    {
         periods[i] = 1;
-    }
-    for (int i = 0; i < numDims; i++)
-    {
         pivot *= sizeOfDim[i];
     }
-    if (sizeProc != pivot)
-        return MPI_COMM_NULL;
+    /*if (sizeProc != pivot)
+        return MPI_COMM_NULL;*/
     
 
     //MPI_Dims_create(sizeProc, dimension, ndims);
@@ -42,8 +35,10 @@ MPI_Comm getHypercube(int numDims) {
 }
 
 //Проверка коммуникатора на тополгию гиперкуба
-bool thisIsHypercube(MPI_Comm test_comm,int numDims) {
-    const int sizeNodeHyperCube = 2;
+bool thisIsHypercube(MPI_Comm test_comm,int numDims, int sizeNodeHyperCube) {
+    if (numDims < 2 || sizeNodeHyperCube < 2) {
+        throw "The hypercube should be >= 2d and should size node >= 2d ";
+    }
     int countDis, status;
     int* sizeOfDim = new int[numDims];
     int* periods = new int[numDims];
