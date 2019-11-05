@@ -17,8 +17,6 @@ MPI_Comm getHypercube(int numDims,int sizeNodeHyperCube) {
         periods[i] = 1;
         pivot *= sizeOfDim[i];
     }
-    /*if (sizeProc != pivot)
-        return MPI_COMM_NULL;*/
     
 
     //MPI_Dims_create(sizeProc, dimension, ndims);
@@ -72,6 +70,10 @@ bool thisIsHypercube(MPI_Comm test_comm,int numDims, int sizeNodeHyperCube) {
     return true;
 }
 
-//bool hypercubeDataTransfer(MPI_Comm test_comm) {
-//    int rankProc, sizeProc;
-//}
+bool hypercubeDataTransfer(MPI_Comm hypercube_comm, int numDims, int sizeNodeHyperCube) {
+    int rankProc, sizeProc;
+    MPI_Status status;
+    MPI_Comm_rank(hypercube_comm, &rankProc);
+    MPI_Comm_size(hypercube_comm, &sizeProc);
+    int* coord = new int[numDims];
+}
