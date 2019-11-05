@@ -24,11 +24,11 @@ TEST(Network_Top_Hypercube, Test_This_Hypercube_Has_Not_Right_Dimension) {
 
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
-    if (sizeProc == 4) {
-        MPI_Comm actual_comm = getHypercube(2, 2);
+    if (sizeProc == 8) {
+        MPI_Comm actual_comm = getHypercube(3, 2);
 
         if (rankProc == 0) {
-            ASSERT_FALSE(thisIsHypercube(actual_comm, 3, 2));
+            ASSERT_FALSE(thisIsHypercube(actual_comm, 4, 2));
         }
     }
 }
@@ -38,10 +38,10 @@ TEST(Network_Top_Hypercube, Test_This_Hypercube_Has_Right_Arguments) {
 
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
-    if (sizeProc == 4) {
-        MPI_Comm actual_comm = getHypercube(2, 2);
+    if (sizeProc == 8) {
+        MPI_Comm actual_comm = getHypercube(3, 2);
         if (rankProc == 0) {
-            ASSERT_TRUE(thisIsHypercube(actual_comm, 2, 2));
+            ASSERT_TRUE(thisIsHypercube(actual_comm, 3, 2));
         }
     }
 }

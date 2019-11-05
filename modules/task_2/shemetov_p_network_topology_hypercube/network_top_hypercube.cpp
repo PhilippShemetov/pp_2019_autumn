@@ -29,7 +29,8 @@ MPI_Comm getHypercube(int numDims,int sizeNodeHyperCube) {
     std::cout << " Rank " << rankProc << " coordinates are " 
         << coord[0] << coord[1] << coord[2] << std::endl;*/
 
-
+    delete[]sizeOfDim;
+    delete[]periods;
     return hypercube_comm;
 
 }
@@ -65,6 +66,9 @@ bool thisIsHypercube(MPI_Comm test_comm,int numDims, int sizeNodeHyperCube) {
             return false;
         }
     }
+    delete[]sizeOfDim;
+    delete[]periods;
+    delete[]coord;
     return true;
 }
 
