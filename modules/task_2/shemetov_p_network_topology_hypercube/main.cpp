@@ -46,17 +46,38 @@ TEST(Network_Top_Hypercube, Test_This_Hypercube_Has_Right_Arguments) {
     }
 }
 
-//TEST(Network_Top_Hypercube, Test_Can_Create_Hypercube_Comm) {
-//    MPI_Comm actual_comm = getHypercube(2);
-//    int rankProc;
-//    
-//    MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
-//
-//    if (rankProc == 0) {
-//        EXPECT_TRUE()
-//    }
-//
-//}
+TEST(Network_Top_Hypercube, Test_Can_Create_Hypercube_Comm) {
+    int rankProc, sizeProc;
+
+    MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
+    if (sizeProc == 8) {
+        MPI_Comm actual_comm = getHypercube(3, 2);
+        if (rankProc == 0) {
+            ASSERT_TRUE(thisIsHypercube(actual_comm, 3, 2));
+        }
+    }
+
+}
+
+TEST(Network_Top_Hypercube, TEST_Topology_Hypercube_Does_Not_Have_Periods) {
+    MPI_Comm test_comm;
+    int rankProc, sizeProc;
+
+    MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
+    
+    if (sizeProc == 8) {
+        int dims[] = { 2, 2, 2 };
+        int periods[] = { 0, 0, 0 };
+
+        MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 1, &test_comm);
+
+        if (rankProc == 0) {
+            ASSERT_FALSE(thisIsHypercube(test_comm, 3, 2));
+        }
+    }
+}
 
 
 
