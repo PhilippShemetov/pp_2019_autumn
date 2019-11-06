@@ -17,15 +17,10 @@ MPI_Comm getHypercube(int numDims,int sizeNodeHyperCube) {
         periods[i] = 1;
         pivot *= sizeOfDim[i];
     }
-    
-
-    //MPI_Dims_create(sizeProc, dimension, ndims);
+  
     MPI_Comm hypercube_comm;
 
     MPI_Cart_create(MPI_COMM_WORLD, numDims, sizeOfDim, periods, reorder, &hypercube_comm);
-    /*MPI_Cart_coords(hypercube_comm,rankProc,numDims,coord);
-    std::cout << " Rank " << rankProc << " coordinates are " 
-        << coord[0] << coord[1] << coord[2] << std::endl;*/
 
     delete[]sizeOfDim;
     delete[]periods;
@@ -70,10 +65,22 @@ bool thisIsHypercube(MPI_Comm test_comm,int numDims, int sizeNodeHyperCube) {
     return true;
 }
 
-bool hypercubeDataTransfer(MPI_Comm hypercube_comm, int numDims, int sizeNodeHyperCube) {
+bool testHypercubeDataTransfer(MPI_Comm hypercube_comm, int numDims, int sizeNodeHyperCube) {
     int rankProc, sizeProc;
+    int rank_source, rank_dest, dataCount;
     MPI_Status status;
     MPI_Comm_rank(hypercube_comm, &rankProc);
     MPI_Comm_size(hypercube_comm, &sizeProc);
     int* coord = new int[numDims];
+    MPI_Cart_coords(hypercube_comm, rankProc, numDims, coord);
+    std::cout << " Rank " << rankProc << " coordinates are "
+        << coord[0] << coord[1] << coord[2] << std::endl;
+    
+    for (size_t i = 0; i < numDims; i++) {
+        MPI_Cart_shift(hypercube_comm, i, -1, &rank_source, &rank_dest);
+        if ((rank_source == MPI_PROC_NULL) || (rank_dest == MPI_PROC_NULL))
+            dataCount = 1;
+        std::cout << rank_source << "/ " << rank_dest << std::endl;
+    }
+    return true;
 }
