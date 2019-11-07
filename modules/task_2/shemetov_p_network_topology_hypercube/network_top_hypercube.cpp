@@ -6,7 +6,7 @@ MPI_Comm getHypercube(int numDims, int sizeNodeHyperCube) {
     if (numDims < 2 || sizeNodeHyperCube < 2) {
         throw "The hypercube should be >= 2d and size node should be >= 2d ";
     }
-    int sizeProc, rankProc;
+    int sizeProc;
     int reorder = 1;
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     int* sizeOfDim = new int[numDims];
@@ -67,14 +67,11 @@ bool testHypercubeDataTransfer(MPI_Comm hypercube_comm, int numDims, int sizeNod
     }
     int rankProc, sizeProc;
     int pivot = 1;
-    int* coord = new int[numDims];
     int left, right;
     int local_data = 0, global_data = 0;
-    MPI_Status status;
     MPI_Comm_rank(hypercube_comm, &rankProc);
     MPI_Comm_size(hypercube_comm, &sizeProc);
-    MPI_Cart_coords(hypercube_comm, rankProc, numDims, coord);
-    for (size_t i = 0; i < numDims; i++) {
+    for (int i = 0; i < numDims; i++) {
         // getting neighbour proccesses
         MPI_Cart_shift(hypercube_comm, i, 1, &left, &right);
         if ((left == MPI_PROC_NULL) || (right == MPI_PROC_NULL))
@@ -85,7 +82,7 @@ bool testHypercubeDataTransfer(MPI_Comm hypercube_comm, int numDims, int sizeNod
     }
     MPI_Bcast(&local_data, 1, MPI_INT, 0, hypercube_comm);
     MPI_Reduce(&local_data, &global_data, 1, MPI_INT, MPI_SUM, 0, hypercube_comm);
-    for (size_t i = 0; i < numDims; i++) {
+    for (int i = 0; i < numDims; i++) {
         pivot *= sizeNodeHyperCube;
     }
     if (pivot != global_data) {
