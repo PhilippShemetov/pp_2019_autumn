@@ -76,9 +76,9 @@ TEST(Network_Top_Hypercube, TEST_Transfer_Data_Work_Correctly) {
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
     
-    if (sizeProc == 8) {
-        MPI_Comm actual_comm = getHypercube(3, 2);
-        bool condition = testHypercubeDataTransfer(actual_comm,3,2);
+    if (sizeProc == 27) {
+        MPI_Comm actual_comm = getHypercube(3, 3);
+        bool condition = testHypercubeDataTransfer(actual_comm,3,3);
 
         if (rankProc == 0) {
             ASSERT_TRUE(condition);

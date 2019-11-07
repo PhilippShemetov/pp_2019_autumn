@@ -7,7 +7,7 @@ MPI_Comm getHypercube(int numDims,int sizeNodeHyperCube) {
         throw "The hypercube should be >= 2d and should size node >= 2d ";
     }
     int sizeProc,rankProc;
-    int reorder = 1, pivot = 1;
+    int reorder = 1;
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     int *sizeOfDim = new int[numDims];
     int* periods = new int[numDims];
@@ -15,7 +15,6 @@ MPI_Comm getHypercube(int numDims,int sizeNodeHyperCube) {
     {
         sizeOfDim[i] = sizeNodeHyperCube;
         periods[i] = 1;
-        pivot *= sizeOfDim[i];
     }
   
     MPI_Comm hypercube_comm;
@@ -37,27 +36,27 @@ bool thisIsHypercube(MPI_Comm test_comm,int numDims, int sizeNodeHyperCube) {
     int* sizeOfDim = new int[numDims];
     int* periods = new int[numDims];
     int* coord = new int[numDims];
+    for (int i = 0; i < numDims; i++)
+    {
+        sizeOfDim[i] = sizeNodeHyperCube;
+    }
     //Возвращаем кол-во измерений
     MPI_Cartdim_get(test_comm, &countDis);
     if (numDims != countDis) {
         return false;
     }
-    //Проверяем, является ли коммуникатор правильным типом топологии
-    MPI_Topo_test(test_comm,&status);
-    if (status != MPI_CART) {
-        return false;
-    }
-    for (int i = 0; i < numDims; i++)
-    {
-        sizeOfDim[i] = sizeNodeHyperCube;
-    }
     //Получаем информацию декартовой топологии и проверям периодичность
-    MPI_Cart_get(test_comm, numDims,sizeOfDim, periods, coord);
+    MPI_Cart_get(test_comm, numDims, sizeOfDim, periods, coord);
     for (int i = 0; i < numDims; i++)
     {
         if (periods[i] != 1) {
             return false;
         }
+    }
+    //Проверяем, является ли коммуникатор правильным типом топологии
+    MPI_Topo_test(test_comm,&status);
+    if (status != MPI_CART) {
+        return false;
     }
     delete[]sizeOfDim;
     delete[]periods;
@@ -65,9 +64,11 @@ bool thisIsHypercube(MPI_Comm test_comm,int numDims, int sizeNodeHyperCube) {
     return true;
 }
 
+//Тестирование передача данных 
 bool testHypercubeDataTransfer(MPI_Comm hypercube_comm, int numDims, int sizeNodeHyperCube) {
     int rankProc, sizeProc;
-    int rank_source, rank_dest, dataCount;
+    int left, right, dataCount = 0;
+    int local_data = 0;
     MPI_Status status;
     MPI_Comm_rank(hypercube_comm, &rankProc);
     MPI_Comm_size(hypercube_comm, &sizeProc);
@@ -77,10 +78,21 @@ bool testHypercubeDataTransfer(MPI_Comm hypercube_comm, int numDims, int sizeNod
         << coord[0] << coord[1] << coord[2] << std::endl;
     
     for (size_t i = 0; i < numDims; i++) {
-        MPI_Cart_shift(hypercube_comm, i, -1, &rank_source, &rank_dest);
-        if ((rank_source == MPI_PROC_NULL) || (rank_dest == MPI_PROC_NULL))
+        //получаем соседние процессы
+        MPI_Cart_shift(hypercube_comm, i, 1, &left, &right); 
+        if ((left == MPI_PROC_NULL) || (right == MPI_PROC_NULL))
             dataCount = 1;
-        std::cout << rank_source << "/ " << rank_dest << std::endl;
+        std::cout << "rank "<< rankProc << " : " << left << "/ " << right << std::endl;
     }
-    return true;
+    if (dataCount) {
+        return false;
+    }
+
+    /*if (rankProc == 0) {
+        local_data = 1;
+    }
+    for (size_t i = 0; i < numDims; i++) {
+        MPI_Send(&local_data,1,MPI_INT,right)
+    }
+    return true;*/
 }
