@@ -5,7 +5,13 @@
 
 TEST(Network_Top_Hypercube, Test_Wrong_Size_Dimension_Of_Hypercube) {
     
-    ASSERT_ANY_THROW(getHypercube(-1));
+    ASSERT_ANY_THROW(getHypercube(-1,2));
+
+}
+
+TEST(Network_Top_Hypercube, Test_Wrong_Size_Node_Of_Hypercube) {
+
+    ASSERT_ANY_THROW(getHypercube(2,-1));
 
 }
 
@@ -76,12 +82,32 @@ TEST(Network_Top_Hypercube, TEST_Transfer_Data_Work_Correctly) {
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
     
-    if (sizeProc == 27) {
-        MPI_Comm actual_comm = getHypercube(3, 3);
-        bool condition = testHypercubeDataTransfer(actual_comm,3,3);
+    if (sizeProc == 8) {
+        MPI_Comm actual_comm = getHypercube(3, 2);
+        bool condition = testHypercubeDataTransfer(actual_comm,3,2);
 
         if (rankProc == 0) {
             ASSERT_TRUE(condition);
+        }
+    }
+}
+
+TEST(Network_Top_Hypercube, TEST_Transfer_Data_Not_Work_Correctly) {
+    MPI_Comm test_comm;
+    int rankProc, sizeProc;
+
+    MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
+
+    if (sizeProc == 8) {
+        int dims[] { 2, 2, 2 };
+        int periods[] { 1, 1, 0 };
+
+        MPI_Cart_create(MPI_COMM_WORLD, 3, dims, periods, 1, &test_comm);
+        bool condition = testHypercubeDataTransfer(test_comm, 3, 2);
+
+        if (rankProc == 0) {
+            ASSERT_FALSE(condition);
         }
     }
 }
