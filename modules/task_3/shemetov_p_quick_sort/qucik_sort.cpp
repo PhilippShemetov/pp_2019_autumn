@@ -1,21 +1,38 @@
 // Copyright 2019 Shemetov Philipp
 #include <mpi.h>
 #include "../../../modules/task_3/shemetov_p_quick_sort/quick_sort.h"
-
 #include <iostream>
 #include <vector>
 #include <random>
 #include <time.h>
 #include <cmath>
 
-void randomGenerateVector(std::vector<int>& vec, int sizeArr) {
+void swap(std::vector<int>& arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+
+bool isSortedVec(const std::vector<int>& vec) {
+    for (int i = 0; i < vec.size() - 2; i++)
+        if (vec[i] > vec[i + 1])
+            return false;
+    return true;
+}
+
+std::vector<int> randomGenerateVector(int sizeVector) {
+    if (sizeVector < 1) {
+        throw "ErrorLength";
+    }
     std::mt19937 generation;
     generation.seed(static_cast<unsigned int>(time(0)));
-    for (int i = 0; i < sizeArr; i++)
+    std::vector<int> vec(sizeVector);
+    for (int i = 0; i < sizeVector; i++)
     {
         vec[i] = generation() % 100;
     }
-
+    return vec;
 }
 
 void quickSortWithoutMPI(std::vector<int>& vec, int left, int right) {
@@ -44,5 +61,21 @@ void quickSortWithoutMPI(std::vector<int>& vec, int left, int right) {
         quickSortWithoutMPI(vec, left, r);
     }
 
+    
+}
 
+std::vector<int> quickSortWithMPI(std::vector<int>& vec) {
+    const int sizeVector = vec.size();
+    if (sizeVector < 1) {
+        throw "ErrorLength";
+    }
+    int rankProc, sizeProc;
+    MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
+    const int blockData = sizeVector / sizeProc;
+    const int blockDataRemainder = sizeVector % sizeProc;
+
+    MPI
+
+    return vec;
 }

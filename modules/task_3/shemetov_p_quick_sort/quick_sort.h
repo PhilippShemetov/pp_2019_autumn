@@ -3,9 +3,12 @@
 #define MODULES_TASK_2_SHEMETOV_P_QUICK_SORT_QUICK_SORT_H_
 
 #include<mpi.h>
+#include<vector>
 
-void randomGenerateVector(std::vector<int>& vec, int sizeArr);
+bool isSortedVec(const std::vector<int>& vec);
+std::vector<int> randomGenerateVector(int sizeVector);
 void quickSortWithoutMPI(std::vector<int>& vec, int left, int right);
-
+std::vector<int> quickSortWithMPI(std::vector<int>& vec);
+void swap(std::vector<int>& arr, int i, int j);
 
 #endif  // MODULES_TASK_2_SHEMETOV_P_QUICK_SORT_QUICK_SORT_H_
