@@ -6,6 +6,8 @@
 #include <random>
 #include <time.h>
 #include <cmath>
+#include <stdio.h>
+#include <stdlib.h>
 
 void swap(std::vector<int>& arr, int i, int j) {
     int temp = arr[i];
@@ -64,18 +66,27 @@ void quickSortWithoutMPI(std::vector<int>& vec, int left, int right) {
     
 }
 
-std::vector<int> quickSortWithMPI(std::vector<int>& vec) {
+void quickSortWithMPI(std::vector<int>& vec, int sizeVector) {
+    printf("check");
     const int sizeVector = vec.size();
     if (sizeVector < 1) {
         throw "ErrorLength";
     }
+
     int rankProc, sizeProc;
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
     const int blockData = sizeVector / sizeProc;
     const int blockDataRemainder = sizeVector % sizeProc;
+    printf("check1");
+    std::vector<int> localVector(blockData);
+    printf("check2");
+    MPI_Scatter(&vec, blockData, MPI_INT, &localVector, blockData, MPI_INT, 0, MPI_COMM_WORLD);
+    quickSortWithoutMPI(localVector, 0, blockData - 1);
+    MPI_Barrier(MPI_COMM_WORLD);
+    printf("Rank %d: \n ", rankProc);
+    for (int i = 0; i < blockData; i++)
+        printf("|%d| ", localVector[i]);
+    printf("\n");
 
-    MPI
-
-    return vec;
 }

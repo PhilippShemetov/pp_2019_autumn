@@ -29,6 +29,24 @@ TEST(Quick_sort, Test_Random_Sort) {
     }
 }
 
+TEST(Quick_sort, Test_Random_Sort_With_MPI) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    printf("Rank %d \n", rank);
+    std::vector<int> array(10);
+    if (rank == 0) {
+        printf("Rank %d \n", rank);
+        array = randomGenerateVector(10);
+    }
+    printf("Debug");
+    for (auto x : array) {
+        printf("%d", x);
+    }
+    quickSortWithMPI(array);
+    printf("Debug2");
+    if (rank == 0)
+        EXPECT_TRUE(isSortedVec(array));
+}
 
 
 
