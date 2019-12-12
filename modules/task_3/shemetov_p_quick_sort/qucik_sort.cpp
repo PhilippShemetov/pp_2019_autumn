@@ -9,19 +9,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void swap(std::vector<int>& arr, int i, int j) {
-    int temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-}
-
-
 bool isSortedVec(const std::vector<int>& vec) {
     for (int i = 0; i < vec.size() - 2; i++)
         if (vec[i] > vec[i + 1])
             return false;
     return true;
 }
+
+void swap(int* i, int* j) {
+    int temp = *i;
+    *i = *j;
+    *j = temp;
+}
+
 
 std::vector<int> randomGenerateVector(int sizeVector) {
     if (sizeVector < 1) {
