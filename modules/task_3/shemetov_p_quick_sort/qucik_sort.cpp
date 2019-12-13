@@ -19,8 +19,8 @@ std::vector<int> randomGenerateVector(int sizeVector) {
     return vec;
 }
 
-bool isSortedVec(const std::vector<int>& vec) {
-    for (int i = 0; i < vec.size() - 1; i++)
+bool isSortedVec(const std::vector<int> vec) {
+    for (uint32_t i = 0; i < vec.size() - 1; i++)
         if (vec[i] > vec[i + 1])
             return false;
     return true;

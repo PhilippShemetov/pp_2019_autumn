@@ -5,7 +5,7 @@
 #include<mpi.h>
 #include<vector>
 
-bool isSortedVec(const std::vector<int>& vec);
+bool isSortedVec(const std::vector<int> vec);
 std::vector<int> randomGenerateVector(int sizeVector);
 void quickSortWithoutMPI(std::vector<int>* vec, int left, int right);
 void quickSortWithMPI(std::vector<int>* vec);

@@ -44,8 +44,9 @@ TEST(Quick_sort, Test_Random_Sort_With_MPI) {
     }
     quickSortWithMPI(&array);
 
-    if (rank == 0)
+    if (rank == 0) {
         EXPECT_TRUE(isSortedVec(array));
+    }
 }
 
 TEST(Quick_sort, Test_Random_Sort_With_MPI_Large_Size) {
@@ -56,8 +57,9 @@ TEST(Quick_sort, Test_Random_Sort_With_MPI_Large_Size) {
         array = randomGenerateVector(10000000);
     }
     quickSortWithMPI(&array);
-    if (rank == 0)
+    if (rank == 0) {
         EXPECT_TRUE(isSortedVec(array));
+    }
 }
 
 TEST(Quick_sort, Test_Empty_Array) {
