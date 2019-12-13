@@ -10,8 +10,8 @@ TEST(Quick_sort, Test_Init_Sort) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     if (rank == 0) {
-        std::vector<int> array = { 15, -17, 18, 8, -14, -10, 16, 12, -6, -9 };
-        std::vector<int> result = { -17, -14, -10, -9, -6, 8, 12, 15, 16, 18 };
+        std::vector<int> array = { 54, -32, 11, 456, -70, 42, 16, 5, -2111, 2433 };
+        std::vector<int> result = { -2111, -70, -32, 5, 11, 16, 42, 54, 456, 2433 };
         quickSortWithoutMPI(array,0,array.size()-1);
         ASSERT_EQ(array, result);
     }
@@ -32,18 +32,11 @@ TEST(Quick_sort, Test_Random_Sort) {
 TEST(Quick_sort, Test_Random_Sort_With_MPI) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    printf("Rank %d \n", rank);
-    std::vector<int> array(10);
-    if (rank == 0) {
-        printf("Rank %d \n", rank);
-        array = randomGenerateVector(10);
-    }
+    std::vector<int> array = { 54, -32, 11, 456, -70, 42, 16, 5, -2111, 2433 };
+    //if(rank == 0)
+    //array = randomGenerateVector(10);
     printf("Debug");
-    for (auto x : array) {
-        printf("%d", x);
-    }
     quickSortWithMPI(array);
-    printf("Debug2");
     if (rank == 0)
         EXPECT_TRUE(isSortedVec(array));
 }
