@@ -18,23 +18,17 @@ std::vector<int> randomGenerateVector(int sizeVector) {
     std::vector<int> vec(sizeVector);
     for (int i = 0; i < sizeVector; i++)
     {
-        vec[i] = generation() % 100;
+        vec[i] = generation() % 100000000;
     }
     return vec;
 }
 
 bool isSortedVec(const std::vector<int>& vec) {
-    for (int i = 0; i < vec.size() - 2; i++)
+    for (int i = 0; i < vec.size() - 1; i++)
         if (vec[i] > vec[i + 1])
             return false;
     return true;
 }
-
-//void swap(int* i, int* j) {
-//    int temp = *i;
-//    *i = *j;
-//    *j = temp;
-//}
 
 void quickSortWithoutMPI(std::vector<int>& vec, int left, int right) {
     int l = left, r = right;
@@ -63,59 +57,26 @@ void quickSortWithoutMPI(std::vector<int>& vec, int left, int right) {
     }
 }
 
-void quickSortWithMPI(std::vector<int> vec) {
+void quickSortWithMPI(std::vector<int>& vec) {
     int sizeVector = vec.size();
     if (sizeVector < 1) {
         throw "ErrorLength";
     }
-    printf("check MPI");
     int rankProc, sizeProc;
-    double start, end, finish;
     MPI_Comm_size(MPI_COMM_WORLD, &sizeProc);
     MPI_Comm_rank(MPI_COMM_WORLD, &rankProc);
 
-    if (rankProc == 0) {
-        start = MPI_Wtime();
-    }
-
-    int sizeVectorNew = sizeVector;
-    if (sizeVector % sizeProc != 0) {
-        int offset = sizeProc - (sizeVector % sizeProc);
-        sizeVectorNew += offset;
-        for (int i = 0; i < offset; i++)
-            vec.push_back(0);
-    }
-    int blockData = sizeVectorNew / sizeProc;
+    int blockData = sizeVector / sizeProc;
     std::vector<int> localVec(blockData);
-   
+
     MPI_Scatter(&vec[0], blockData, MPI_INT, &localVec[0],
         blockData, MPI_INT, 0, MPI_COMM_WORLD);
-    
-    for (int i = 0; i < sizeVectorNew; i++)
-    {
-        std::cout << " " << vec[i];
-    }
-    for (int i = 0; i < blockData; i++)
-    {
-        std::cout << " " << localVec[i];
-    }
+
     quickSortWithoutMPI(localVec, 0, blockData - 1);
-    std::cout << std::endl;
-    for (int i = 0; i < blockData; i++)
-    {
-        std::cout << " " << localVec[i];
-    }
 
     MPI_Gather(&localVec[0], blockData, MPI_INT, &vec[0], blockData, MPI_INT, 0, MPI_COMM_WORLD);
-    std::cout << std::endl;
-    for (int i = 0; i < sizeVectorNew; i++)
-    {
-        std::cout << " " << vec[i];
-    }
 
     if (rankProc == 0) {
-        end = MPI_Wtime();
-        finish = end - start;
-        printf("Time taken: %f\n", sizeVectorNew, finish);
+        quickSortWithoutMPI(vec, 0, sizeVector - 1);
     }
 }
