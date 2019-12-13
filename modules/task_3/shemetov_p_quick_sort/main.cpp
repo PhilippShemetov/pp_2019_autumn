@@ -5,6 +5,12 @@
 #include "./quick_sort.h"
 #include <vector>
 
+TEST(Quick_sort, Test_Wrong_Size_Random_Vector) {
+    std::vector<int> vectorTest;
+    ASSERT_ANY_THROW(vectorTest = randomGenerateVector(-100));
+}
+
+
 TEST(Quick_sort, Test_Init_Sort) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -69,6 +75,15 @@ TEST(Quick_sort, Test_Random_Sort_With_MPI_Large_Size) {
         EXPECT_TRUE(isSortedVec(array));
 }
 
+TEST(Quick_sort, Test_Empty_Array) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    if (rank == 0) {
+        std::vector<int> array(0);
+        ASSERT_ANY_THROW(quickSortWithoutMPI(array, 0, array.size() - 1));
+    }
+}
 
 
 

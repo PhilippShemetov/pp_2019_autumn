@@ -31,6 +31,9 @@ bool isSortedVec(const std::vector<int>& vec) {
 }
 
 void quickSortWithoutMPI(std::vector<int>& vec, int left, int right) {
+    if (vec.size() < 1) {
+        throw "ErrorLentgh";
+    }
     int l = left, r = right;
     int pivot = vec[(left + right) / 2];
     int temp;
